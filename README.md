@@ -11,7 +11,7 @@ For further information on the TokenTrader and TokenTraderFactory contracts, see
 ## Notes
 * This scripts list all deployed TokenTrader, even those deployed with some errors. The Sell price and Units fields for the TokenTrade deployed with errors is normally crazily incorrect.
 * If you do want to try purchasing GNTs from these contracts, test with  a small amount first.
-* This is just a tool for finding the contracts. Your use of the contracts is your own responsibility.
+* This is just a tool for finding the contracts. Your use of the contracts is your own responsibility!
 
 ## Download
 To use this script, download https://github.com/bokkypoobah/FindGNTTokenTrader/blob/master/findGNTTokenTrader and read the instructions at the top of the file.

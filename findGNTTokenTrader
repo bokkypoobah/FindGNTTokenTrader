@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# ------------------------------------------------------------------------------
+# Find Golem Network Token (GNT) Token Trader information
+# 
+# Works on Linux and OS/X. May work on Windows with Cygwin.
+#
+# Usage:
+#   1. Download this script to findGNTTokenTrader
+#   2. `chmod 700 findGNTTokenTrader`
+#   3. Run `geth console` in a window.
+#   4. Then run this script `./findGNTTokenTrader` in a separate window.
+#
+# More information:
+#   * https://www.bokconsulting.com.au/blog/trustless-token-selling-contract/
+#   * https://www.reddit.com/r/ethtrader/comments/5cnl58/trustless_gnt_selling_contract/
+#
+# Notes:
+#   * This scripts list all deployed TokenTrader, even those deployed with some
+#     errors. The Sell price and Units fields for the TokenTrade deployed
+#     with errors is normally crazily incorrect
+#   * If you do want to try purchasing GNTs from these contracts, test with
+#     a small amount first
+#
+# History:
+#   * Nov 14 2016 - Version 1.0
+#
+# Enjoy. (c) BokkyPooBah 2016. The MIT licence.
+# ------------------------------------------------------------------------------
+
+geth attach << EOF | grep "Data:" | sed "s/Data: //"
+
+var gntTokenTraderFactoryDeploymentBlock = 2615848;
+var gntTokenTraderFactoryAddress = "0xC4aF56cD5254Aef959D4BcE2F75874007808b701";
+var gntTokenTraderFactoryABI = [{"constant":false,"inputs":[{"name":"_asset","type":"address"},{"name":"_sellPrice","type":"uint256"},{"name":"_units","type":"uint256"},{"name":"_sellsTokens","type":"bool"}],"name":"createTradeContract","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"tradeContract","type":"address"}],"name":"verify","outputs":[{"name":"valid","type":"bool"},{"name":"asset","type":"address"},{"name":"sellPrice","type":"uint256"},{"name":"units","type":"uint256"},{"name":"sellsTokens","type":"bool"}],"payable":false,"type":"function"},{"payable":false,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bookid","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"addr","type":"address"}],"name":"TradeListing","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bookid","type":"bytes32"},{"indexed":false,"name":"asset","type":"address"},{"indexed":false,"name":"units","type":"uint256"}],"name":"NewBook","type":"event"}];
+var gntTokenTraderABI = [{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"withdraw","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"asset","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sellPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sellsTokens","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"withdrawAsset","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"units","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_token","type":"address"},{"name":"_value","type":"uint256"}],"name":"withdrawToken","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"_sellsTokens","type":"bool"}],"name":"activate","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"type":"function"},{"inputs":[{"name":"_asset","type":"address"},{"name":"_sellPrice","type":"uint256"},{"name":"_units","type":"uint256"},{"name":"_sellsTokens","type":"bool"}],"type":"constructor"},{"payable":true,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sells","type":"bool"}],"name":"ActivatedEvent","type":"event"},{"anonymous":false,"inputs":[],"name":"UpdateEvent","type":"event"}];
+var gntTokenABIFragment = [{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
+
+var gntTokenTraderFactoryInterface = web3.eth.contract(gntTokenTraderFactoryABI).at(gntTokenTraderFactoryAddress);
+var tradeListingEvent = gntTokenTraderFactoryInterface.TradeListing({}, { fromBlock: gntTokenTraderFactoryDeploymentBlock, toBlock: 'latest' });
+var i = 0;
+tradeListingEvent.watch(function (error, result) {
+    console.log("Data: " + i + " TokenTraderAddress: " + result.args.addr);
+    console.log("Data:   Owner                      : " + result.args.owner);
+    try {
+      var tokenTrader = web3.eth.contract(gntTokenTraderABI).at(result.args.addr);
+      var assetAddress = tokenTrader.asset();
+      console.log("Data:   Asset address              : " + assetAddress);
+      var sellPrice = tokenTrader.sellPrice();
+      console.log("Data:   Sell price                 : " + sellPrice);
+      var units = tokenTrader.units();
+      console.log("Data:   Units                      : " + units);
+      console.log("Data:   Ethers per 1,000 tokens    : " + sellPrice.div(units).mul(1000));
+      var asset = web3.eth.contract(gntTokenABIFragment).at(assetAddress);
+      var originalTokenBalance = asset.balanceOf(result.args.owner, result.blockNumber);
+      console.log("Data:   Tokens balance at creation : " + originalTokenBalance.div(1e18));
+      var tokenBalance = asset.balanceOf(result.args.owner);
+      console.log("Data:   Current token balance      : " + tokenBalance.div(1e18));
+      var etherBalance = eth.getBalance(result.args.owner);
+      console.log("Data:   Current ether balance      : " + etherBalance.div(1e18));
+    } catch (e) {
+      console.log("Data:   Cannot get details for TokenTrader " + e);
+    }
+    console.log(i++ + ": " + JSON.stringify(result));
+});
+
+EOF

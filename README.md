@@ -1,2 +1,2 @@
 # FindGNTTokenTrader
-Find Golem Network Token TokenTrader Information
+Find Golem Network Token (GNT) TokenTrader Information

@@ -24,6 +24,7 @@
 #
 # History:
 #   * Nov 14 2016 - Version 1.0
+#   * Nov 14 2016 - Version 1.01 - With bookid feedback from /u/JonnyLatte
 #
 # Enjoy. (c) BokkyPooBah 2016. The MIT licence.
 # ------------------------------------------------------------------------------
@@ -32,12 +33,13 @@ geth attach << EOF | grep "Data:" | sed "s/Data: //"
 
 var gntTokenTraderFactoryDeploymentBlock = 2615848;
 var gntTokenTraderFactoryAddress = "0xC4aF56cD5254Aef959D4BcE2F75874007808b701";
+var gntBookId = "0x2fd64880bc17977672b2e25fff32b433975c4004b4fbd094936429e92f58d39f";
 var gntTokenTraderFactoryABI = [{"constant":false,"inputs":[{"name":"_asset","type":"address"},{"name":"_sellPrice","type":"uint256"},{"name":"_units","type":"uint256"},{"name":"_sellsTokens","type":"bool"}],"name":"createTradeContract","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"tradeContract","type":"address"}],"name":"verify","outputs":[{"name":"valid","type":"bool"},{"name":"asset","type":"address"},{"name":"sellPrice","type":"uint256"},{"name":"units","type":"uint256"},{"name":"sellsTokens","type":"bool"}],"payable":false,"type":"function"},{"payable":false,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bookid","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"addr","type":"address"}],"name":"TradeListing","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bookid","type":"bytes32"},{"indexed":false,"name":"asset","type":"address"},{"indexed":false,"name":"units","type":"uint256"}],"name":"NewBook","type":"event"}];
 var gntTokenTraderABI = [{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"withdraw","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"asset","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sellPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sellsTokens","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"withdrawAsset","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"units","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_token","type":"address"},{"name":"_value","type":"uint256"}],"name":"withdrawToken","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"_sellsTokens","type":"bool"}],"name":"activate","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"type":"function"},{"inputs":[{"name":"_asset","type":"address"},{"name":"_sellPrice","type":"uint256"},{"name":"_units","type":"uint256"},{"name":"_sellsTokens","type":"bool"}],"type":"constructor"},{"payable":true,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sells","type":"bool"}],"name":"ActivatedEvent","type":"event"},{"anonymous":false,"inputs":[],"name":"UpdateEvent","type":"event"}];
 var gntTokenABIFragment = [{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
 
 var gntTokenTraderFactoryInterface = web3.eth.contract(gntTokenTraderFactoryABI).at(gntTokenTraderFactoryAddress);
-var tradeListingEvent = gntTokenTraderFactoryInterface.TradeListing({}, { fromBlock: gntTokenTraderFactoryDeploymentBlock, toBlock: 'latest' });
+var tradeListingEvent = gntTokenTraderFactoryInterface.TradeListing({valueA: gntBookId}, { fromBlock: gntTokenTraderFactoryDeploymentBlock, toBlock: 'latest' });
 var i = 0;
 tradeListingEvent.watch(function (error, result) {
     console.log("Data: " + i + " TokenTraderAddress: " + result.args.addr);

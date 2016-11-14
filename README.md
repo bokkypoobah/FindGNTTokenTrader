@@ -149,50 +149,7 @@ Sample output :
       Ethers per 1,000 tokens    : 2.33
       Current token balance      : 255296.1965953052123
       Current ether balance      : 907.80281224346376669
-    14 TokenTraderAddress: 0xe0a1c26c65deef0316762ebc8f3734d703664947
-      Owner                      : 0x16efbb80e246b61e42e0d8bd6496cefb9d40867b
-      Asset address              : 0xa74476443119a942de498590fe1f2454d7d4ac0d
-      Sells tokens               : true
-      Sell price                 : 150
-      Units                      : 100000
-      Ethers per 1,000 tokens    : 1.5
-      Current token balance      : 0
-      Current ether balance      : 907.80281224346376669
-    15 TokenTraderAddress: 0x7ea06cf742bf823d8b711c35795859445f3181c1
-      Owner                      : 0x16efbb80e246b61e42e0d8bd6496cefb9d40867b
-      Asset address              : 0xa74476443119a942de498590fe1f2454d7d4ac0d
-      Sells tokens               : true
-      Sell price                 : 150
-      Units                      : 100000
-      Ethers per 1,000 tokens    : 1.5
-      Current token balance      : 0
-      Current ether balance      : 907.80281224346376669
-    16 TokenTraderAddress: 0x27b705cb1e854205db45d2353e1e7c9e5997b585
-      Owner                      : 0x16efbb80e246b61e42e0d8bd6496cefb9d40867b
-      Asset address              : 0xa74476443119a942de498590fe1f2454d7d4ac0d
-      Sells tokens               : true
-      Sell price                 : 150
-      Units                      : 100000
-      Ethers per 1,000 tokens    : 1.5
-      Current token balance      : 0.6666666666668
-      Current ether balance      : 907.80281224346376669
-    17 TokenTraderAddress: 0x5eb860c816789bb52300a0675300701eca203cf8
-      Owner                      : 0x16efbb80e246b61e42e0d8bd6496cefb9d40867b
-      Asset address              : 0xa74476443119a942de498590fe1f2454d7d4ac0d
-      Sells tokens               : true
-      Sell price                 : 195
-      Units                      : 100000
-      Ethers per 1,000 tokens    : 1.95
-      Current token balance      : 28043.5897435897439
-      Current ether balance      : 907.80281224346376669
-    18 TokenTraderAddress: 0xc231dc7cd9f83eaa24fa9742ef844349f8f0efa9
-      Owner                      : 0x16efbb80e246b61e42e0d8bd6496cefb9d40867b
-      Asset address              : 0xa74476443119a942de498590fe1f2454d7d4ac0d
-      Sells tokens               : true
-      Sell price                 : 200
-      Units                      : 100000
-      Ethers per 1,000 tokens    : 2
-      Current token balance      : 0
+
     Listing generated at Mon, 14 Nov 2016 15:47:50 UTC
     0 TokenTrader Address: 0x399156ee3339f4b29a53e307b98cce09fda3bac7
       Deployed                   : #2615921 at Sat, 12 Nov 2016 23:17:56 UTC

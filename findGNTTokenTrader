@@ -25,6 +25,8 @@
 # History:
 #   * Nov 14 2016 - Version 1.0
 #   * Nov 14 2016 - Version 1.01 - With bookid feedback from /u/JonnyLatte
+#   * Nov 14 2016 - Version 1.02 - Getting correct token balance for the 
+#                                 TokenTrader contract
 #
 # Enjoy. (c) BokkyPooBah 2016. The MIT licence.
 # ------------------------------------------------------------------------------
@@ -41,6 +43,7 @@ var gntTokenABIFragment = [{"constant":true,"inputs":[{"name":"_owner","type":"a
 var gntTokenTraderFactoryInterface = web3.eth.contract(gntTokenTraderFactoryABI).at(gntTokenTraderFactoryAddress);
 var tradeListingEvent = gntTokenTraderFactoryInterface.TradeListing({valueA: gntBookId}, { fromBlock: gntTokenTraderFactoryDeploymentBlock, toBlock: 'latest' });
 var i = 0;
+console.log("Data: Listing generated at " + new Date().toUTCString()); 
 tradeListingEvent.watch(function (error, result) {
     console.log("Data: " + i + " TokenTraderAddress: " + result.args.addr);
     console.log("Data:   Owner                      : " + result.args.owner);
@@ -48,15 +51,18 @@ tradeListingEvent.watch(function (error, result) {
       var tokenTrader = web3.eth.contract(gntTokenTraderABI).at(result.args.addr);
       var assetAddress = tokenTrader.asset();
       console.log("Data:   Asset address              : " + assetAddress);
+      var sellsTokens = tokenTrader.sellsTokens();
+      console.log("Data:   Sells tokens               : " + sellsTokens);
       var sellPrice = tokenTrader.sellPrice();
       console.log("Data:   Sell price                 : " + sellPrice);
       var units = tokenTrader.units();
       console.log("Data:   Units                      : " + units);
       console.log("Data:   Ethers per 1,000 tokens    : " + sellPrice.div(units).mul(1000));
       var asset = web3.eth.contract(gntTokenABIFragment).at(assetAddress);
-      var originalTokenBalance = asset.balanceOf(result.args.owner, result.blockNumber);
-      console.log("Data:   Tokens balance at creation : " + originalTokenBalance.div(1e18));
-      var tokenBalance = asset.balanceOf(result.args.owner);
+      // Does not work
+      // var originalTokenBalance = asset.balanceOf(result.args.addr, result.blockNumber);
+      // console.log("Data:   Tokens balance at creation : " + originalTokenBalance.div(1e18));
+      var tokenBalance = asset.balanceOf(result.args.addr);
       console.log("Data:   Current token balance      : " + tokenBalance.div(1e18));
       var etherBalance = eth.getBalance(result.args.owner);
       console.log("Data:   Current ether balance      : " + etherBalance.div(1e18));

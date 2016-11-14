@@ -17,6 +17,9 @@ For further information on the TokenTrader and TokenTraderFactory contracts, see
 To use this script, download https://github.com/bokkypoobah/FindGNTTokenTrader/blob/master/findGNTTokenTrader and read the instructions at the top of the file.
 
 ## Sample Output
+
+See the list above for the latest files with the name 'output_yyyymmdd_hhmmssUTC.txt'.
+
 Sample output :
 
     Listing generated at Mon, 14 Nov 2016 04:06:41 UTC

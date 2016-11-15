@@ -2,7 +2,7 @@
 
 # ------------------------------------------------------------------------------
 # Find Golem Network Token (GNT) Token Trader information
-#  
+# 
 # Works on Linux and OS/X. May work on Windows with Cygwin.
 #
 # Usage:
@@ -30,12 +30,17 @@
 #   * Nov 15 2016 - Version 1.03 - Tidy
 #   * Nov 15 2016 - Version 1.04 - Getting correct ether balance for the
 #                                  TokenTrader contract
+#   * Nov 16 2016 - Version 1.05 - CSV and filters
 #
 # Enjoy. (c) BokkyPooBah 2016. The MIT licence.
 # ------------------------------------------------------------------------------
 
-# geth attach << EOF
-geth attach << EOF | grep "Data:" | sed "s/Data: //"
+DATETIME=`date -u "+%Y%m%d_%H%M%S%Z"`
+TMPFILENAME="/tmp/findGNTTokenTrader.txt";
+TXTFILENAME="findGNTTokenTraderOutput_${DATETIME}.txt"
+CSVFILENAME="findGNTTokenTraderOutput_${DATETIME}.csv";
+
+geth attach << EOF > $TMPFILENAME
 
 var gntTokenTraderFactoryDeploymentBlock = 2615848;
 var gntTokenTraderFactoryAddress = "0xC4aF56cD5254Aef959D4BcE2F75874007808b701";
@@ -44,57 +49,75 @@ var gntTokenTraderFactoryABI = [{"constant":false,"inputs":[{"name":"_asset","ty
 var gntTokenTraderABI = [{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"withdraw","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"asset","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sellPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sellsTokens","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"withdrawAsset","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"units","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_token","type":"address"},{"name":"_value","type":"uint256"}],"name":"withdrawToken","outputs":[{"name":"ok","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"_sellsTokens","type":"bool"}],"name":"activate","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"type":"function"},{"inputs":[{"name":"_asset","type":"address"},{"name":"_sellPrice","type":"uint256"},{"name":"_units","type":"uint256"},{"name":"_sellsTokens","type":"bool"}],"type":"constructor"},{"payable":true,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sells","type":"bool"}],"name":"ActivatedEvent","type":"event"},{"anonymous":false,"inputs":[],"name":"UpdateEvent","type":"event"}];
 var gntTokenABIFragment = [{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
 var erc20ABIFragment = [{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"}];
+var minimumSellPrice = 0.0001;
+var maximumSellPrice = 100000000;
 
 var gntTokenTraderFactoryInterface = web3.eth.contract(gntTokenTraderFactoryABI).at(gntTokenTraderFactoryAddress);
 var tradeListingEvent = gntTokenTraderFactoryInterface.TradeListing({valueA: gntBookId}, {fromBlock: gntTokenTraderFactoryDeploymentBlock, toBlock: 'latest'});
 var i = 0;
-console.log("Data: Listing generated at " + new Date().toUTCString()); 
+var now = new Date();
+console.log("Data: Listing generated at " + now.toUTCString()); 
+console.log("CSV: #,TokenTraderAddress,SellsTokens,EtherPer1000Tokens,TokenBalance,Block,Deployed,TxHash,Owner,Asset,Symbol,SellPrice,Units," +
+  "TokenTraderEtherBalance,OwnerEtherBalance");  
 tradeListingEvent.watch(function (error, result) {
-    console.log("Data: " + i + " TokenTrader Address: " + result.args.addr);
-    var block = eth.getBlock(result.blockNumber);
-    var deployedAt = new Date(block.timestamp * 1000);
-    console.log("Data:   Deployed                         : #" + result.blockNumber + " at " + deployedAt.toUTCString());
-    console.log("Data:   TxHash                           : " + result.transactionHash);
-    console.log("Data:   Owner                            : " + result.args.owner);
     try {
       var tokenTrader = web3.eth.contract(gntTokenTraderABI).at(result.args.addr);
       var assetAddress = tokenTrader.asset();
-      var ercInterface = web3.eth.contract(erc20ABIFragment).at(assetAddress);
-      var symbol;
-      try {
-        symbol = ercInterface.symbol();
-      } catch (e) {
-        symbol = "???";
-      }
-      console.log("Data:   Asset address                    : " + assetAddress + " " + symbol);
-      var sellsTokens = tokenTrader.sellsTokens();
-      console.log("Data:   Sells tokens                     : " + sellsTokens);
       var sellPrice = tokenTrader.sellPrice();
-      console.log("Data:   Sell price                       : " + sellPrice);
-      var units = tokenTrader.units();
-      console.log("Data:   Units                            : " + units);
-      console.log("Data:   Ethers per 1,000 tokens          : " + sellPrice.div(units).mul(1000));
-      var asset = web3.eth.contract(gntTokenABIFragment).at(assetAddress);
-      // Does not work
-      // var originalTokenBalance = asset.balanceOf(result.args.addr, result.blockNumber);
-      // console.log("Data:   Tokens balance at creation    : " + originalTokenBalance.div(1e18));
-      var tokenBalance = asset.balanceOf(result.args.addr);
-      console.log("Data:   Current TokenTrader token balance: " + tokenBalance.div(1e18));
-      var tokenTraderEtherBalance = eth.getBalance(result.args.addr);
-      console.log("Data:   Current TokenTrader ether balance: " + tokenTraderEtherBalance.div(1e18));
-      var etherBalance = eth.getBalance(result.args.owner);
-      console.log("Data:   Current Owner ether balance      : " + etherBalance.div(1e18));
+      if ("0xa74476443119a942de498590fe1f2454d7d4ac0d" == assetAddress &&
+          sellPrice >= minimumSellPrice &&
+          sellPrice <= maximumSellPrice) {
+        console.log("Data: " + i + " TokenTrader Address: " + result.args.addr);
+        var block = eth.getBlock(result.blockNumber);
+        var deployedAt = new Date(block.timestamp * 1000);
+        console.log("Data:   Deployed                         : #" + result.blockNumber + " at " + deployedAt.toUTCString());
+        console.log("Data:   TxHash                           : " + result.transactionHash);
+        console.log("Data:   Owner                            : " + result.args.owner);
+        var ercInterface = web3.eth.contract(erc20ABIFragment).at(assetAddress);
+        var symbol;
+        try {
+          symbol = ercInterface.symbol();
+        } catch (e) {
+          symbol = "???";
+        }
+        console.log("Data:   Asset address                    : " + assetAddress + " " + symbol);
+        var sellsTokens = tokenTrader.sellsTokens();
+        console.log("Data:   Sells tokens                     : " + sellsTokens);
+        console.log("Data:   Sell price                       : " + sellPrice);
+        var units = tokenTrader.units();
+        console.log("Data:   Units                            : " + units);
+        console.log("Data:   Ethers per 1,000 tokens          : " + sellPrice.div(units).mul(1000));
+        var asset = web3.eth.contract(gntTokenABIFragment).at(assetAddress);
+        // Does not work
+        // var originalTokenBalance = asset.balanceOf(result.args.addr, result.blockNumber);
+        // console.log("Data:   Tokens balance at creation    : " + originalTokenBalance.div(1e18));
+        var tokenBalance = asset.balanceOf(result.args.addr);
+        console.log("Data:   Current TokenTrader token balance: " + tokenBalance.div(1e18));
+        var tokenTraderEtherBalance = eth.getBalance(result.args.addr);
+        console.log("Data:   Current TokenTrader ether balance: " + tokenTraderEtherBalance.div(1e18));
+        var ownerEtherBalance = eth.getBalance(result.args.owner);
+        console.log("Data:   Current Owner ether balance      : " + ownerEtherBalance.div(1e18));
       
-      // var updateEvent = tokenTrader.UpdateEvent({}, {fromBlock: result.blockNumber, toBlock: 'latest'});
-      // updateEvent.watch(function (error1, result1) {
-      //   console.log("    " + JSON.stringify(result1));
-      // });
-      // updateEvent.stopWatching();
+        // var updateEvent = tokenTrader.UpdateEvent({}, {fromBlock: result.blockNumber, toBlock: 'latest'});
+        // updateEvent.watch(function (error1, result1) {
+        //   console.log("    " + JSON.stringify(result1));
+        // });
+        // updateEvent.stopWatching();
+        console.log("CSV: " + i + "," + result.args.addr + "," + sellsTokens + "," + 
+          sellPrice.div(units).mul(1000) + "," + tokenBalance.div(1e18) + "," + 
+          result.blockNumber + "," + deployedAt.toUTCString() + "," + 
+          result.transactionHash + "," + result.args.owner + "," + 
+          assetAddress + "," + symbol + "," + sellPrice + "," + units + "," +           
+          tokenTraderEtherBalance.div(1e18) + "," + ownerEtherBalance.div(1e18));
+        console.log(i++ + ": " + JSON.stringify(result));
+      }
     } catch (e) {
       console.log("Data:   Cannot get details for TokenTrader " + e);
     }
-    console.log(i++ + ": " + JSON.stringify(result));
 });
 tradeListingEvent.stopWatching();
 
 EOF
+
+grep "Data:" $TMPFILENAME | sed "s/Data: //" > $TXTFILENAME
+grep "CSV:" $TMPFILENAME | sed "s/CSV: //" | grep -v "false" > $CSVFILENAME

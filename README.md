@@ -18,7 +18,7 @@ To use this script, download https://github.com/bokkypoobah/FindGNTTokenTrader/b
 
 ## Sample Output
 
-See the list above for the latest files with the name 'output_yyyymmdd_hhmmssUTC.txt'.
+See the list above for the latest files with the name 'findGNTTokenTraderOutput_yyyymmdd_hhmmssUTC.csv'.
 
 Sample output :
 
@@ -325,76 +325,7 @@ Sample output :
       Current Owner ether balance      : 31.954190302422230693
     25 TokenTrader Address: 0x5ada3127827f8acf7486097c5c0a960b46bca0d4
       Deployed                         : #2623292 at Mon, 14 Nov 2016 04:10:02 UTC
-      TxHash                           : 0x1e3c470a337ea7f47d09053ac168000757071c4c31658cad1c41a1d9adb79ab7
-      Owner                            : 0x8fdb7441bd9263499af346135153a737aa9b3fbb
-      Asset address                    : 0xa74476443119a942de498590fe1f2454d7d4ac0d GNT
-      Sells tokens                     : true
-      Sell price                       : 3e+33
-      Units                            : 1
-      Ethers per 1,000 tokens          : 3e+36
-      Current TokenTrader token balance: 0
-      Current TokenTrader ether balance: 0
-      Current Owner ether balance      : 31.954190302422230693
-    26 TokenTrader Address: 0x3ef6d1f334176835daaa23eb14535edf76fa80d8
-      Deployed                         : #2623793 at Mon, 14 Nov 2016 06:04:38 UTC
-      TxHash                           : 0x8c8fb28d84d601d106446b5ea580ef398c4cbeb99491c56d6ccecbfe7d76ed2e
-      Owner                            : 0x8fdb7441bd9263499af346135153a737aa9b3fbb
-      Asset address                    : 0xa74476443119a942de498590fe1f2454d7d4ac0d GNT
-      Sells tokens                     : true
-      Sell price                       : 300
-      Units                            : 100000
-      Ethers per 1,000 tokens          : 3
-      Current TokenTrader token balance: 0
-      Current TokenTrader ether balance: 0
-      Current Owner ether balance      : 31.954190302422230693
-    27 TokenTrader Address: 0xf31057bc0ff5e3e3b32652b29c0451624392567c
-      Deployed                         : #2624008 at Mon, 14 Nov 2016 06:54:11 UTC
-      TxHash                           : 0x7188c6c2ad1a9a98b4c03c2e75dc06031dad7b393f1b3685880f18cfbcc8dbdc
-      Owner                            : 0x16efbb80e246b61e42e0d8bd6496cefb9d40867b
-      Asset address                    : 0xa74476443119a942de498590fe1f2454d7d4ac0d GNT
-      Sells tokens                     : true
-      Sell price                       : 200
-      Units                            : 100000
-      Ethers per 1,000 tokens          : 2
-      Current TokenTrader token balance: 100050
-      Current TokenTrader ether balance: 0
-      Current Owner ether balance      : 1085.347925203083825378
-    28 TokenTrader Address: 0x406a65de7a2e94ef19597a79296e269fada85a71
-      Deployed                         : #2624456 at Mon, 14 Nov 2016 08:39:06 UTC
-      TxHash                           : 0x0eca65c8457f60599d55dfe8554e9232b824eba714d941d318660d7e691629af
-      Owner                            : 0x45689bac94edae26625521f1361748119f05fc30
-      Asset address                    : 0xa74476443119a942de498590fe1f2454d7d4ac0d GNT
-      Sells tokens                     : true
-      Sell price                       : 190
-      Units                            : 100000
-      Ethers per 1,000 tokens          : 1.9
-      Current TokenTrader token balance: 136166.8742105263162
-      Current TokenTrader ether balance: 121.289
-      Current Owner ether balance      : 9.89068129935552
-    29 TokenTrader Address: 0x1a22bb6827dbb7df60a6de726519c2a509271695
-      Deployed                         : #2625481 at Mon, 14 Nov 2016 12:51:52 UTC
-      TxHash                           : 0xb87f558aa137e8d74582b58ee1ffb86d4b4e13b7f286d7de50ffe2a7cf65455a
-      Owner                            : 0x45689bac94edae26625521f1361748119f05fc30
-      Asset address                    : 0xa74476443119a942de498590fe1f2454d7d4ac0d GNT
-      Sells tokens                     : true
-      Sell price                       : 150
-      Units                            : 100000
-      Ethers per 1,000 tokens          : 1.5
-      Current TokenTrader token balance: 785444.0532583746681
-      Current TokenTrader ether balance: 91.8339201124380015
-      Current Owner ether balance      : 9.89068129935552
-    30 TokenTrader Address: 0xffd41efe3d3c073f4c7dbf2cec7c19111fc7523e
-      Deployed                         : #2627210 at Mon, 14 Nov 2016 19:37:27 UTC
-      TxHash                           : 0x83989b896e99c80647a38a2d6bb1fd82af5478ff125b4acedfad9c868ae7b420
-      Owner                            : 0x8fdb7441bd9263499af346135153a737aa9b3fbb
-      Asset address                    : 0xa74476443119a942de498590fe1f2454d7d4ac0d GNT
-      Sells tokens                     : true
-      Sell price                       : 200
-      Units                            : 100000
-      Ethers per 1,000 tokens          : 2
-      Current TokenTrader token balance: 4250
-      Current TokenTrader ether balance: 1.502
-      Current Owner ether balance      : 31.954190302422230693
+
 
 
 

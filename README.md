@@ -23,7 +23,7 @@ See the list above for the latest files with the name 'findGNTTokenTraderOutput_
 Sample output from https://github.com/bokkypoobah/FindGNTTokenTrader/blob/master/findGNTTokenTraderOutput_20161115_200640UTC.csv:
 
 
-#,TokenTraderAddress,SellsTokens,EtherPer1000Tokens,TokenBalance,Block,Deployed,TxHash,Owner,Asset,Symbol,SellPrice,Units,TokenTraderEtherBalance,OwnerEtherBalance,
+\#,TokenTraderAddress,SellsTokens,EtherPer1000Tokens,TokenBalance,Block,Deployed,TxHash,Owner,Asset,Symbol,SellPrice,Units,TokenTraderEtherBalance,OwnerEtherBalance,
     26,0x4b17f65fc6450cbcced9e893dd84123a5fc13362,TRUE,1.45,154913.0693,2631874,Tue, 15 Nov 2016 13:57:31 UTC,0xbee51d62e775ffe9809eafa8478ee0fa7402ba1bfc7c57a25b9474a4f11b0594,0x16efbb80e246b61e42e0d8bd6496cefb9d40867b,0xa74476443119a942de498590fe1f2454d7d4ac0d,GNT,145,100000,290.144,1089.749375
     27,0x1e00980cb7b109d290fcf6c4e579debb8c836c39,TRUE,1.45,329983.1034,2633247,Tue, 15 Nov 2016 19:26:08 UTC,0x0d32f0035c4ab9bd7fb5b3e0f066e02254eb1930f0b311c0663c911e905ef2c5,0x0020dba1d308339182239056a00fcc146d2e26e0,0xa74476443119a942de498590fe1f2454d7d4ac0d,GNT,145,100000,0.0245,458.6701383
     1,0xb362bba1c7c5c857e3ac74d740c0007c48db7362,TRUE,1.5,0,2617375,Sun, 13 Nov 2016 05:05:53 UTC,0xb7ef581cd0e6597525e254add6f820ac6ecf860d89d01656035dfd880dac2747,0x0020dba1d308339182239056a00fcc146d2e26e0,0xa74476443119a942de498590fe1f2454d7d4ac0d,GNT,150,100000,2.50E-16,458.6701383

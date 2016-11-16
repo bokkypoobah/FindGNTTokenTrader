@@ -32,6 +32,7 @@
 #                                  TokenTrader contract
 #   * Nov 16 2016 - Version 1.05 - CSV and filters
 #   * Nov 16 2016 - Version 1.06 - Formatting CSV
+#   * Nov 16 2016 - Version 1.07 - Filtering out contracts with 0 tokens
 #
 # Enjoy. (c) BokkyPooBah 2016. The MIT licence.
 # ------------------------------------------------------------------------------
@@ -65,9 +66,12 @@ tradeListingEvent.watch(function (error, result) {
       var tokenTrader = web3.eth.contract(gntTokenTraderABI).at(result.args.addr);
       var assetAddress = tokenTrader.asset();
       var sellPrice = tokenTrader.sellPrice();
+      var asset = web3.eth.contract(gntTokenABIFragment).at(assetAddress);
+      var tokenBalance = asset.balanceOf(result.args.addr);
       if ("0xa74476443119a942de498590fe1f2454d7d4ac0d" == assetAddress &&
           sellPrice >= minimumSellPrice &&
-          sellPrice <= maximumSellPrice) {
+          sellPrice <= maximumSellPrice &&
+          tokenBalance > 0) {
         console.log("Data: " + i + " TokenTrader Address: " + result.args.addr);
         var block = eth.getBlock(result.blockNumber);
         var deployedAt = new Date(block.timestamp * 1000);
@@ -88,11 +92,9 @@ tradeListingEvent.watch(function (error, result) {
         var units = tokenTrader.units();
         console.log("Data:   Units                            : " + units);
         console.log("Data:   Ethers per 1,000 tokens          : " + sellPrice.div(units).mul(1000));
-        var asset = web3.eth.contract(gntTokenABIFragment).at(assetAddress);
         // Does not work
         // var originalTokenBalance = asset.balanceOf(result.args.addr, result.blockNumber);
         // console.log("Data:   Tokens balance at creation    : " + originalTokenBalance.div(1e18));
-        var tokenBalance = asset.balanceOf(result.args.addr);
         console.log("Data:   Current TokenTrader token balance: " + tokenBalance.div(1e18));
         var tokenTraderEtherBalance = eth.getBalance(result.args.addr);
         console.log("Data:   Current TokenTrader ether balance: " + tokenTraderEtherBalance.div(1e18));

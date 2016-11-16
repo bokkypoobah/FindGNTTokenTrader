@@ -31,6 +31,7 @@
 #   * Nov 15 2016 - Version 1.04 - Getting correct ether balance for the
 #                                  TokenTrader contract
 #   * Nov 16 2016 - Version 1.05 - CSV and filters
+#   * Nov 16 2016 - Version 1.06 - Formatting CSV
 #
 # Enjoy. (c) BokkyPooBah 2016. The MIT licence.
 # ------------------------------------------------------------------------------
@@ -105,7 +106,7 @@ tradeListingEvent.watch(function (error, result) {
         // updateEvent.stopWatching();
         console.log("CSV: " + i + "," + result.args.addr + "," + sellsTokens + "," + 
           sellPrice.div(units).mul(1000) + "," + tokenBalance.div(1e18) + "," + 
-          result.blockNumber + "," + deployedAt.toUTCString() + "," + 
+          result.blockNumber + "," + deployedAt.toUTCString().substring(5) + "," + 
           result.transactionHash + "," + result.args.owner + "," + 
           assetAddress + "," + symbol + "," + sellPrice + "," + units + "," +           
           tokenTraderEtherBalance.div(1e18) + "," + ownerEtherBalance.div(1e18));

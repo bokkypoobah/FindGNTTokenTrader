@@ -3,6 +3,8 @@ Find Golem Network Token (GNT) TokenTrader Information
 
 This script will list the TokenTrade contracts created by the TokenTraderFactory contract deployed to https://etherscan.io/address/0xc4af56cd5254aef959d4bce2f75874007808b701 .
 
+This list has now been deployed as a live updating site at https://cryptoderivatives.market/.
+
 ## Background
 For further information on the TokenTrader and TokenTraderFactory contracts, see:
 * https://www.bokconsulting.com.au/blog/trustless-token-selling-contract/
